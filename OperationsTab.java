@@ -57,95 +57,107 @@
 	 Explanation: The three highest numbers 5, 3, 2 are converted to ASCII characters.
  * **/
 
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class OperationsTab {
 	static String MainString;
 	public static Scanner input = new Scanner(System.in);
-	//static public Dependencies dependency = new Dependencies();
+	static public Constants constant = new Constants();
 	
 	public static void main(String[] args) {
-		System.out.println("1. Valid Parenthesis Combination Generator\r\n"
-				+ "2. Digit Sum Loop\r\n"
-				+ "3. Consecutive Number Summer\r\n"
-				+ "4. Caesar Cipher with Shift Variability\r\n"
-				+ "5. Encoding Challenge with ASCII Conversion\r\n"
-				+ "6. Exit From the Program");
+		System.out.println(constant.MENU_OPTIONS);
 		String input_option = input.next();
 		boolean isQuit = false; 
 		do {
 			switch(input_option) {
             case "1":
-                System.out.println("Executing Case 1 :");
-                allSubstrings();
+                System.out.println(constant.EXECUTING_CASE + "1");
+                String inputString = input.next();
+                char[] input1 = new char[inputString.length()];
+                boolean[] used = new boolean[input1.length];
+                for (int i = 0; i < inputString.length(); i++) {
+                    input1[i] = inputString.charAt(i);
+                }
+                char[] result = new char[input1.length];
+                for (int length = 1; length <= input1.length; length++) {
+                    generateCombinations(input1, result, 0, used, length);
+                }
                 break;
             case "2":
-                System.out.println("Executing Case 2 :");
-                int number = input.nextInt();
-                
-                break;
+                System.out.println(constant.EXECUTING_CASE + "2");
+                while(true) {
+                	try{
+                		System.out.println(constant.ENTER_NUMBER);
+                		int number = input.nextInt();
+                		if(number < 0) {
+                			System.out.println(constant.POSITIVE_NUMBER_ONLY);
+                		}
+                		else {
+                			sumOfDigits(number);
+                			break;
+                		}
+                		break;
+                	}
+                	catch(InputMismatchException e) {
+                		System.out.println(constant.INVALID_INPUT);
+                		input.next();
+                	}
+                }
             case "3":
-                System.out.println("Executing Case 3 :");
+                System.out.println(constant.EXECUTING_CASE + "3");
                 break;
             case "4":
-                System.out.println("Executing Case 4 :");
+                System.out.println(constant.EXECUTING_CASE + "4");
                 break;
             case "5":
-                System.out.println("Executing Case 5 :");
+                System.out.println(constant.EXECUTING_CASE + "5");
                 break;
             case "6":
-                System.out.println("Exiting from program :");
+                System.out.println(constant.EXITING_PROGRAM);
                 isQuit = true;
                 break;
             default:
-                System.out.println("Invalid input");
+                System.out.println(constant.INVALID_INPUT);
                 isQuit = false;
                 break;
 				}
 			if(!isQuit) {
-				System.out.println("1. Valid Parenthesis Combination Generator\r\n"
-						+ "2. Digit Sum Loop\r\n"
-						+ "3. Consecutive Number Summer\r\n"
-						+ "4. Caesar Cipher with Shift Variability\r\n"
-						+ "5. Encoding Challenge with ASCII Conversion\r\n"
-						+ "6. Exit From the Program");
+				System.out.println(constant.MENU_OPTIONS);
 				input_option = input.next();
 			}
 		}while(!isQuit);
 	}
-	public static void allSubstrings() {
-		while (true) {
-            try {
-                System.out.println("Enter String Whose Substring is to be found : ");
-                String string = input.next();
-                for(int i = 0; i < string.length();i++) {
-                	if(Character.isDigit(string.charAt(i))) {
-                		System.out.println("Enter only Characters!!");
-                		break;
-                	}
-                }
-                
-             }
-            catch(InputMismatchException e) {
-            	System.out.println("Invalid Input");  
-            	break;
+	public static void generateCombinations(char[] input1, char[] result, int index, boolean[] used, int length) {
+        if (index == length) {
+            for (int i = 0; i < length; i++) {
+                System.out.print(result[i]);
             }
-	}
-	}
+            System.out.println();
+            return;
+        }
+        for (int i = 0; i < input1.length; i++) {
+        	if (!used[i]) {
+                used[i] = true;
+                result[index] = input1[i]; 
+                generateCombinations(input1, result, index + 1, used, length);
+                used[i] = false;
+            } 
+        }
+    }
 	public static void sumOfDigits(int n) {
 		int number = n;
 		int sum = 0;
 		while(number != 0) {
-			int rem = number % 10;
-			sum = sum + rem;
+			sum = sum + (number%10);
 			number /= 10;
 		}
-		if(number < 9) {
-			
+		if(sum > 9) {
+			sumOfDigits(sum);
 		}
-		
+		else {
+			System.out.println(sum);
+		}
 	}
 
 }
