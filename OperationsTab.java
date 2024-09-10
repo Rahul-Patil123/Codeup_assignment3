@@ -95,6 +95,12 @@ public class OperationsTab {
                 break;
             case "4":
                 System.out.println(constant.EXECUTING_CASE + "4");
+                String mainString ="";
+                System.out.println(constant.ENTER_STRING);
+                input.nextLine();
+                mainString = input.nextLine();
+                String encryptedMessage = shiftVariability(mainString);
+                System.out.println(encryptedMessage);
                 break;
             case "5":
                 System.out.println(constant.EXECUTING_CASE + "5");
@@ -132,8 +138,7 @@ public class OperationsTab {
         for (int i = 0; i < input1.length; i++) {
         	if (!used[i]) {
                 used[i] = true;
-                result[index] = input1[i]; 
-                System.out.println("hello");
+                result[index] = input1[i];
                 generateStrings(input1, result, index + 1, used, length);
                 used[i] = false;
             } 
@@ -244,11 +249,55 @@ public class OperationsTab {
         }
     }
 	
-	//
+	//This function is used to return Encrypted String to the array
+	//Parameters include main string that is to be encrypted
+	public static String shiftVariability(String mainString) {
+        System.out.println(constant.ENTER_STRING + "(pattern with comma)");
+        String stringPattern = input.nextLine();
+
+        if (stringPattern == null || stringPattern.isEmpty()) {
+            System.out.println(constant.NON_EMPTY+ "(pattern with comma)");
+            return constant.ENTER_STRING;
+        }
+        int[] patternArray = convertPatternToArray(stringPattern);
+
+        String encrypted = "";
+        int patternLength = patternArray.length;
+        int patternIndex = 0;
+
+        for (int i = 0; i < mainString.length(); i++) {
+            char currentCharacter = mainString.charAt(i);
+            if (Character.isUpperCase(currentCharacter)) {
+                int shift = patternArray[patternIndex % patternLength];
+                char encryptedCharacter = (char) ((currentCharacter - 'A' + shift) % 26 + 'A');
+                encrypted += encryptedCharacter;
+                patternIndex++;
+            } else if (Character.isLowerCase(currentCharacter)) {
+                int shift = patternArray[patternIndex % patternLength];
+                char encryptedCharacter = (char) ((currentCharacter - 'a' + shift) % 26 + 'a');
+                encrypted += encryptedCharacter;
+                patternIndex++;
+            } else {
+                encrypted += currentCharacter;
+            }
+        }
+        return encrypted;
+    }
 	
-	public static void shiftVariability() {
-		
-	}
+	public static int[] convertPatternToArray(String shiftPatternInput) {
+        String[] stringValues = shiftPatternInput.split(",");
+        int[] shiftPattern = new int[stringValues.length];
+
+        for (int i = 0; i < stringValues.length; i++) {
+            try {
+                shiftPattern[i] = Integer.parseInt(stringValues[i].trim());
+            } catch (NumberFormatException e) {
+                System.out.println(constant.INVALID_INPUT);
+                shiftPattern[i] = 0;
+            }
+        }
+        return shiftPattern;
+    }
 	public static void shift(){
         System.out.println(constant.MOVE_CHARACTER);
         int FrequencyOfMoving;
