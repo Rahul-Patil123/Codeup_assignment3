@@ -21,6 +21,7 @@ public class Constants {
 	final String ENTER_SIZE = "Enter size of the input ";
 	final String ENTER_ELEMENTS = "Enter elements of ";
 	final String LIMIT_ERROR = "Series out of limit";
+	final String NON_EMPTY = "Can't be empty";
 	final String MOVE_CHARACTER = "Enter moving Character : ";
 	
 }
